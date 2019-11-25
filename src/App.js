@@ -1,7 +1,12 @@
 import React from 'react'
+import Navbar from './components/navbar';
 
 function App() {
-  return <h1>Our Electron App</h1>
+  return (
+    <div>
+      <Navbar />
+    </div>
+  )
 }
 
 export default App
