@@ -18,8 +18,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import Paper from '@material-ui/core/Paper';
-import ClockIcon from '../clockify.png';
 import axios from 'axios';
+import ClockIcon from '../clockify.png';
+import TimeEntry from './time.entry';
 
 const drawerWidth = 240;
 
@@ -94,20 +95,6 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const get = () => {
-    axios.get('https://api.clockify.me/api/v1/workspaces/5d638aa6dc72c61b9f1dfa50/user/5c2371d1b079871976621e14/time-entries')
-      .then(function (response) {
-        // handle success
-        console.log(response);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
-      });
-  }
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -181,9 +168,8 @@ export default function PersistentDrawerLeft() {
       >
         <div className={classes.drawerHeader} />
         <Typography>
-          <button onClick={get()}>GET</button>
           <List>
-            {/* TODO: List of time entries */}
+            <TimeEntry />
           </List>
           <Divider />
         </Typography>
