@@ -17,10 +17,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import Paper from '@material-ui/core/Paper';
-import axios from 'axios';
 import ClockIcon from '../clockify.png';
-import TimeEntry from './time.entry';
+import CCalculator from './ccalculator';
 
 const drawerWidth = 240;
 
@@ -66,7 +64,7 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(1),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -167,12 +165,7 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-        <Typography>
-          <List>
-            <TimeEntry />
-          </List>
-          <Divider />
-        </Typography>
+            <CCalculator />
       </main>
     </div>
   );
