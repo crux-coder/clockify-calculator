@@ -14,7 +14,7 @@ import Axios from 'axios';
 
 const styles = theme => ({
   w100: {
-    padding: theme.spacing(1, 2),
+    padding: theme.spacing(1, 1),
     width: '100%'
   },
   inlineBlock: {
@@ -26,8 +26,11 @@ const styles = theme => ({
   floatRight: {
     float: 'right',
   },
+  dFlex: {
+    display: 'flex',
+  },
   slider: {
-    maxWidth: '70%',
+    maxWidth: '50%',
   },
   green: {
     color: '#32965d',
@@ -71,23 +74,25 @@ class TimeEntry extends Component {
   render() {
     const { timeEntry, classes } = this.props;
     return (
-      <React.Fragment className={classes.w100}>
-        <ListItemAvatar className={classes.billableBtn} onClick={this.swapBillable}>
-          {timeEntry.billable ?
-            <AttachMoneyIcon fontSize="large" className={classes.green} /> :
-            <MoneyOffIcon fontSize="large" className={classes.red} />}
-        </ListItemAvatar>
-        <ListItemText
-          className={classes.block}
-          primary={timeEntry.description}
-          secondary={new Date(timeEntry.timeInterval.end).toLocaleDateString()}
-        />
-        <Typography
-          variant="h6" display="block" gutterBottom
-          className={classes.floatRight}>
-          {this.formatTimeDuration(timeEntry.timeInterval.duration)}
-        </Typography><br />
-        {/* <Slider
+      <Paper className={classes.w100}>
+        <div className={classes.dFlex}>
+          <ListItemAvatar className={classes.billableBtn} onClick={this.swapBillable}>
+            {timeEntry.billable ?
+              <AttachMoneyIcon fontSize="large" className={classes.green} /> :
+              <MoneyOffIcon fontSize="large" className={classes.red} />}
+          </ListItemAvatar>
+          <ListItemText
+            className={classes.block}
+            primary={timeEntry.description}
+            secondary={new Date(timeEntry.timeInterval.end).toLocaleDateString()}
+          />
+          <Typography
+            variant="h6" display="block" gutterBottom
+            className={classes.floatRight}>
+            {this.formatTimeDuration(timeEntry.timeInterval.duration)}
+          </Typography>
+        </div>
+        <Slider
           className={classes.slider}
           defaultValue={65}
           getAriaValueText={this.valueText}
@@ -97,8 +102,13 @@ class TimeEntry extends Component {
           min={15}
           max={100}
           valueLabelDisplay="auto"
-        /> */}
-      </React.Fragment>
+        />
+        <Typography
+          variant="h5" display="block" gutterBottom
+          className={classes.floatRight}>
+          $40
+        </Typography>
+      </Paper>
     )
   }
 }
