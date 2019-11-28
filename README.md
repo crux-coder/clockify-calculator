@@ -1,7 +1,26 @@
-# electron-react-app
+# ClockifyCalculator
 
-[https://jsmanifest.com/create-your-first-react-desktop-application-in-electron-with-hot-reload/](https://jsmanifest.com/create-your-first-react-desktop-application-in-electron-with-hot-reload/)
+## ⚙️ Setup
 
-[https://medium.com/better-programming/create-your-first-react-desktop-application-in-electron-with-hot-reload-be96bb455890](https://medium.com/better-programming/create-your-first-react-desktop-application-in-electron-with-hot-reload-be96bb455890)
+#### Requirements
 
-[https://dev.to/jsmanifest/create-your-first-react-desktop-application-in-electron-with-hot-reload-4jj5](https://dev.to/jsmanifest/create-your-first-react-desktop-application-in-electron-with-hot-reload-4jj5)
+* [NodeJS](https://nodejs.org), _10.16.0_
+* [Yarn](https://yarnpkg.com/lang/en/), _>= 1.19.1_
+
+``` bash
+# Clone repo and install dependencies
+$ git clone https://github.com/J-Mustafic/clockify-calculator.git
+$ cd clockify-calculator
+$ yarn
+```
+#### Run in dev
+
+``` bash
+# Start react frontend
+$ yarn start
+```
+
+``` bash
+# Start electron
+$ yarn electron
+```

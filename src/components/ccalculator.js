@@ -3,8 +3,13 @@ import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import TimeEntry from './time.entry';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 import Axios from 'axios';
+import TimeEntry from './time.entry';
 
 
 class CCalculator extends Component {
@@ -32,21 +37,62 @@ class CCalculator extends Component {
     });
   }
 
+  handleDateChange = date => {
+    console.log(date);
+  };
+
   renderTimeEntries() {
     const { timeEntries } = this.state;
-    return timeEntries.map((timeEntry) => <ListItem><TimeEntry
-      timeEntry={timeEntry}
-    />
-    </ListItem>);
+    return timeEntries.map((timeEntry) =>
+      <>
+        <ListItem>
+          <TimeEntry
+            timeEntry={timeEntry}
+          />
+        </ListItem>
+      </>);
   }
 
   render() {
     return (
       <Typography>
+        <Typography>
+          Range:
+          </Typography>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="MM/dd/yyyy"
+            autoOk
+            margin="normal"
+            id="date-picker-inline"
+            label="Start date"
+            value={new Date()}
+            onChange={this.handleDateChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            autoOk
+            format="MM/dd/yyyy"
+            margin="normal"
+            id="date-picker-inline"
+            label="End date"
+            value={new Date()}
+            onChange={this.handleDateChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+        </MuiPickersUtilsProvider>
+        <Divider />
         <List>
           {this.renderTimeEntries()}
         </List>
-        <Divider />
       </Typography>
     )
   }

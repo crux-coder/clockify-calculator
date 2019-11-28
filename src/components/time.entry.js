@@ -24,13 +24,13 @@ const styles = theme => ({
     display: 'block',
   },
   floatRight: {
-    float: 'right',
+    right: '1em'
   },
   dFlex: {
     display: 'flex',
   },
   slider: {
-    maxWidth: '50%',
+    marginRight: '1em'
   },
   green: {
     color: '#32965d',
@@ -40,7 +40,7 @@ const styles = theme => ({
   },
   billableBtn: {
     cursor: 'pointer',
-  },
+  }
 });
 
 class TimeEntry extends Component {
@@ -48,10 +48,19 @@ class TimeEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      timeEntry: props.timeEntry
+      timeEntry: props.timeEntry,
+      baseRate: 40,
+      calculatedRate: 0,
+      defaultPercentage: 65
     }
     this.formatTimeDuration = this.formatTimeDuration.bind(this);
     this.swapBillable = this.swapBillable.bind(this);
+    this.handleSlideChange = this.handleSlideChange.bind(this);
+  }
+
+  componentDidMount() {
+    const { defaultPercentage } = this.state;
+    this.handleSlideChange(null, defaultPercentage);
   }
 
   formatTimeDuration(timeDuration) {
@@ -61,6 +70,13 @@ class TimeEntry extends Component {
     timeDuration = timeDuration.replace('S', '');
 
     return timeDuration;
+  }
+
+  handleSlideChange(event, value) {
+    const { baseRate } = this.state;
+    this.setState({
+      calculatedRate: baseRate * (value / 100),
+    });
   }
 
   swapBillable() {
@@ -73,6 +89,7 @@ class TimeEntry extends Component {
 
   render() {
     const { timeEntry, classes } = this.props;
+    const { baseRate, calculatedRate, defaultPercentage } = this.state;
     return (
       <Paper className={classes.w100}>
         <div className={classes.dFlex}>
@@ -87,27 +104,36 @@ class TimeEntry extends Component {
             secondary={new Date(timeEntry.timeInterval.end).toLocaleDateString()}
           />
           <Typography
-            variant="h6" display="block" gutterBottom
+            variant="h5" display="block" gutterBottom
             className={classes.floatRight}>
             {this.formatTimeDuration(timeEntry.timeInterval.duration)}
           </Typography>
         </div>
-        <Slider
-          className={classes.slider}
-          defaultValue={65}
-          getAriaValueText={this.valueText}
-          aria-labelledby="discrete-slider-small-steps"
-          step={5}
-          marks
-          min={15}
-          max={100}
-          valueLabelDisplay="auto"
-        />
-        <Typography
-          variant="h5" display="block" gutterBottom
-          className={classes.floatRight}>
-          $40
-        </Typography>
+        <div className={classes.dFlex}>
+          <ListItemAvatar>
+
+          </ListItemAvatar>
+          <Slider
+            className={classes.slider}
+            defaultValue={defaultPercentage}
+            onChange={this.handleSlideChange}
+            aria-labelledby="discrete-slider-small-steps"
+            step={5}
+            marks
+            min={15}
+            max={100}
+            valueLabelDisplay="auto"
+          />
+          <div>
+            <Typography
+              variant="h6"
+              display="block"
+              color="textSecondary"
+              className={`${classes.floatRight}`}>
+              ${calculatedRate}/${baseRate}
+            </Typography>
+          </div>
+        </div>
       </Paper>
     )
   }
