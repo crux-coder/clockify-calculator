@@ -15,11 +15,19 @@ import TimeEntry from './time.entry';
 class CCalculator extends Component {
   constructor(props) {
     super(props);
+    //Setting start date a week back from today
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+    
     this.state = {
-      timeEntries: []
+      timeEntries: [],
+      startDate: startDate,
+      endDate: new Date(),
     }
 
     this.renderTimeEntries = this.renderTimeEntries.bind(this);
+    this.handleStartDateChange = this.handleStartDateChange.bind(this);
+    this.handleEndDateChange = this.handleEndDateChange.bind(this);
   }
 
   componentDidMount() {
@@ -37,23 +45,36 @@ class CCalculator extends Component {
     });
   }
 
-  handleDateChange = date => {
-    console.log(date);
+  handleStartDateChange = date => {
+    this.setState({
+      startDate: new Date(date)
+    });
+  };
+
+  handleEndDateChange = date => {
+    this.setState({
+      endDate: new Date(date)
+    });
   };
 
   renderTimeEntries() {
-    const { timeEntries } = this.state;
-    return timeEntries.map((timeEntry) =>
-      <>
+    const { timeEntries, startDate, endDate } = this.state;
+    return timeEntries.filter((timeEntry) =>{
+      const timeEntryDate = new Date(timeEntry.timeInterval.end);
+      return timeEntryDate > startDate && timeEntryDate < endDate;
+    }).map((timeEntry) => {
+      return <>
         <ListItem>
           <TimeEntry
             timeEntry={timeEntry}
           />
         </ListItem>
-      </>);
+      </>
+      });
   }
 
   render() {
+    const {startDate, endDate} = this.state;
     return (
       <Typography>
         <Typography>
@@ -67,9 +88,9 @@ class CCalculator extends Component {
             autoOk
             margin="normal"
             id="date-picker-inline"
-            label="Start date"
-            value={new Date()}
-            onChange={this.handleDateChange}
+            label="From:"
+            value={startDate}
+            onChange={this.handleStartDateChange}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
@@ -81,9 +102,9 @@ class CCalculator extends Component {
             format="MM/dd/yyyy"
             margin="normal"
             id="date-picker-inline"
-            label="End date"
-            value={new Date()}
-            onChange={this.handleDateChange}
+            label="To:"
+            value={endDate}
+            onChange={this.handleEndDateChange}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
