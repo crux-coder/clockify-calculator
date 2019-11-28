@@ -17,7 +17,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import ClockIcon from '../clockify.png';
+import Calcify from '../calcify.png';
 import CCalculator from './ccalculator';
 
 const drawerWidth = 240;
@@ -80,7 +80,7 @@ const useStyles = makeStyles(theme => ({
   },
   logo: {
     marginTop: '0.4em',
-    width: '8em'
+    width: '7em'
   },
   entryPaper: {
     padding: theme.spacing(3, 2),
@@ -122,7 +122,7 @@ export default function PersistentDrawerLeft() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            <img className={classes.logo} src={ClockIcon} alt="Clock icon" />
+            <img className={classes.logo} src={Calcify} alt="Clock icon" />
           </Typography>
         </Toolbar>
       </AppBar>
