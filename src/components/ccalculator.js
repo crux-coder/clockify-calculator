@@ -9,6 +9,8 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import Axios from 'axios';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import TimeEntry from './time.entry';
 
 
@@ -18,7 +20,7 @@ class CCalculator extends Component {
     //Setting start date a week back from today
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 7);
-    
+
     this.state = {
       timeEntries: [],
       startDate: startDate,
@@ -76,11 +78,9 @@ class CCalculator extends Component {
   render() {
     const {startDate, endDate} = this.state;
     return (
-      <Typography>
-        <Typography>
-          Range:
-          </Typography>
+      <Paper>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Grid container justify="space-around">
           <KeyboardDatePicker
             disableToolbar
             variant="inline"
@@ -109,12 +109,13 @@ class CCalculator extends Component {
               'aria-label': 'change date',
             }}
           />
+          </Grid>
         </MuiPickersUtilsProvider>
         <Divider />
         <List>
           {this.renderTimeEntries()}
         </List>
-      </Typography>
+      </Paper>
     )
   }
 }

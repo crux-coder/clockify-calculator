@@ -63,13 +63,19 @@ class TimeEntry extends Component {
     this.handleSlideChange(null, defaultPercentage);
   }
 
-  formatTimeDuration(timeDuration) {
-    timeDuration = timeDuration.replace('PT', '');
-    timeDuration = timeDuration.replace('H', ':');
-    timeDuration = timeDuration.replace('M', ':');
-    timeDuration = timeDuration.replace('S', '');
+  formatTimeDuration(timeInterval) {
+    const startDate = new Date(timeInterval.start);
+    const endDate = new Date(timeInterval.end);
+    const timeDurationInSeconds = (endDate.getTime() - startDate.getTime()) / 1000;
 
-    return timeDuration;
+    var hours   = Math.floor(timeDurationInSeconds / 3600);
+    var minutes = Math.floor((timeDurationInSeconds - (hours * 3600)) / 60);
+    var seconds = timeDurationInSeconds - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    return hours+':'+minutes+':'+seconds;
   }
 
   handleSlideChange(event, value) {
@@ -106,7 +112,7 @@ class TimeEntry extends Component {
           <Typography
             variant="h5" display="block" gutterBottom
             className={classes.floatRight}>
-            {this.formatTimeDuration(timeEntry.timeInterval.duration)}
+            {this.formatTimeDuration(timeEntry.timeInterval)}
           </Typography>
         </div>
         <div className={classes.dFlex}>
