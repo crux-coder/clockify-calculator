@@ -17,8 +17,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Calcify from '../calcify.png';
 import CCalculator from './ccalculator';
+import Axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -92,6 +96,7 @@ export default function PersistentDrawerLeft() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [workspaces, setWorkspaces] = React.useState([]);
 
 
   const handleDrawerOpen = () => {
@@ -101,6 +106,20 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  React.useEffect(() => {
+    Axios.get('https://api.clockify.me/api/v1/workspaces', {
+      headers: {
+        'X-Api-Key': 'XdqcptH3sFUx3ru+',
+      }
+    }).then((response) => {
+      console.log(response.data)
+      setWorkspaces(response.data);
+    }).catch(function (error) {
+      // handle error
+      console.log(error);
+    });
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -121,9 +140,9 @@ export default function PersistentDrawerLeft() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          {!open && <Typography variant="h6" noWrap>
             <img className={classes.logo} src={Calcify} alt="Clock icon" />
-          </Typography>
+          </Typography>}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -136,27 +155,36 @@ export default function PersistentDrawerLeft() {
         }}
       >
         <div className={classes.drawerHeader}>
+          {open && <Typography variant="h6" noWrap>
+            <img className={classes.logo} src={Calcify} alt="Clock icon" />
+          </Typography>}
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+          <ListItem>
+            <ListItemText primary={'Workspaces'} />
+          </ListItem>
+          <Divider />
+          {workspaces.map((workspace, index) => (
+            <ListItem button key={workspace.id}>
+              <ListItemIcon><DashboardIcon /></ListItemIcon>
+              <ListItemText primary={workspace.name} />
             </ListItem>
           ))}
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button key={'Settings'}>
+            <ListItemIcon><SettingsApplicationsIcon /></ListItemIcon>
+            <ListItemText primary={'Settings'} />
+          </ListItem>
+          <ListItem button key={'Profile'}>
+            <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+            <ListItemText primary={'Profile'} />
+          </ListItem>
         </List>
       </Drawer>
       <main
@@ -165,7 +193,7 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-            <CCalculator />
+        <CCalculator />
       </main>
     </div>
   );
