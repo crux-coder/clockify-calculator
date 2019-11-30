@@ -30,10 +30,20 @@ class CCalculator extends Component {
     this.renderTimeEntries = this.renderTimeEntries.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
+    this.getTimeEntries = this.getTimeEntries.bind(this);
   }
 
   componentDidMount() {
+    this.getTimeEntries();
+  }
+
+  getTimeEntries() {
+    const { startDate, endDate } = this.state;
     Axios.get('https://api.clockify.me/api/v1/workspaces/5d638aa6dc72c61b9f1dfa50/user/5c2371d1b079871976621e14/time-entries', {
+      params: {
+        start: startDate.toISOString(),
+        end: endDate.toISOString(),
+      },
       headers: {
         'X-Api-Key': 'XdqcptH3sFUx3ru+',
       }
@@ -51,17 +61,19 @@ class CCalculator extends Component {
     this.setState({
       startDate: new Date(date)
     });
+    this.getTimeEntries();
   };
 
   handleEndDateChange = date => {
     this.setState({
       endDate: new Date(date)
     });
+    this.getTimeEntries();
   };
 
   renderTimeEntries() {
     const { timeEntries, startDate, endDate } = this.state;
-    return timeEntries.filter((timeEntry) =>{
+    return timeEntries.filter((timeEntry) => {
       const timeEntryDate = new Date(timeEntry.timeInterval.end);
       return timeEntryDate > startDate && timeEntryDate < endDate;
     }).map((timeEntry) => {
@@ -72,43 +84,43 @@ class CCalculator extends Component {
           />
         </ListItem>
       </>
-      });
+    });
   }
 
   render() {
-    const {startDate, endDate} = this.state;
+    const { startDate, endDate } = this.state;
     return (
       <Paper>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Grid container justify="space-around">
-          <KeyboardDatePicker
-            disableToolbar
-            variant="inline"
-            format="MM/dd/yyyy"
-            autoOk
-            margin="normal"
-            id="date-picker-inline"
-            label="From:"
-            value={startDate}
-            onChange={this.handleStartDateChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
-          />
-          <KeyboardDatePicker
-            disableToolbar
-            variant="inline"
-            autoOk
-            format="MM/dd/yyyy"
-            margin="normal"
-            id="date-picker-inline"
-            label="To:"
-            value={endDate}
-            onChange={this.handleEndDateChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
-          />
+          <Grid container justify="space-around">
+            <KeyboardDatePicker
+              disableToolbar
+              variant="inline"
+              format="MM/dd/yyyy"
+              autoOk
+              margin="normal"
+              id="date-picker-inline"
+              label="From:"
+              value={startDate}
+              onChange={this.handleStartDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+            <KeyboardDatePicker
+              disableToolbar
+              variant="inline"
+              autoOk
+              format="MM/dd/yyyy"
+              margin="normal"
+              id="date-picker-inline"
+              label="To:"
+              value={endDate}
+              onChange={this.handleEndDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
           </Grid>
         </MuiPickersUtilsProvider>
         <Divider />
