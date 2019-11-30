@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,7 +10,9 @@ import {
 import Axios from 'axios';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import TimeEntry from './time.entry';
+import { Typography } from '@material-ui/core';
 
 
 class CCalculator extends Component {
@@ -20,11 +21,11 @@ class CCalculator extends Component {
     //Setting start date a week back from today
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 7);
-
     this.state = {
       timeEntries: [],
       startDate: startDate,
       endDate: new Date(),
+      isLoading: true
     }
 
     this.renderTimeEntries = this.renderTimeEntries.bind(this);
@@ -37,9 +38,20 @@ class CCalculator extends Component {
     this.getTimeEntries();
   }
 
+  componentDidUpdate(prevProps) {
+    const { workspace } = prevProps;
+    if (workspace && this.props.workspace.id !== workspace.id) {
+      this.getTimeEntries();
+    }
+  }
+
   getTimeEntries() {
     const { startDate, endDate } = this.state;
-    Axios.get('https://api.clockify.me/api/v1/workspaces/5d638aa6dc72c61b9f1dfa50/user/5c2371d1b079871976621e14/time-entries', {
+    const { workspace } = this.props;
+    this.setState({
+      isLoading: true
+    })
+    workspace && Axios.get(`https://api.clockify.me/api/v1/workspaces/${workspace.id}/user/5c2371d1b079871976621e14/time-entries`, {
       params: {
         start: startDate.toISOString(),
         end: endDate.toISOString(),
@@ -49,7 +61,8 @@ class CCalculator extends Component {
       }
     }).then((response) => {
       this.setState({
-        timeEntries: response.data
+        timeEntries: response.data,
+        isLoading: false
       });
     }).catch(function (error) {
       // handle error
@@ -88,7 +101,7 @@ class CCalculator extends Component {
   }
 
   render() {
-    const { startDate, endDate } = this.state;
+    const { startDate, endDate, timeEntries, isLoading } = this.state;
     return (
       <Paper>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -125,7 +138,11 @@ class CCalculator extends Component {
         </MuiPickersUtilsProvider>
         <Divider />
         <List>
-          {this.renderTimeEntries()}
+          {isLoading ? <ListItem><CircularProgress style={{ margin: 'auto' }} /></ListItem> : timeEntries.length > 0 ? this.renderTimeEntries() : <ListItem>
+            <Typography align="center" color="textSecondary">
+              No time entries in selected date interval.
+            </Typography>
+          </ListItem>}
         </List>
       </Paper>
     )

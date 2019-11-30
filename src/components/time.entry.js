@@ -4,13 +4,10 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
 import Slider from '@material-ui/core/Slider';
 import ListItemText from '@material-ui/core/ListItemText';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import MoneyOffIcon from '@material-ui/icons/MoneyOff';
-
-import Axios from 'axios';
 
 const styles = theme => ({
   w100: {
@@ -68,14 +65,14 @@ class TimeEntry extends Component {
     const endDate = new Date(timeInterval.end);
     const timeDurationInSeconds = (endDate.getTime() - startDate.getTime()) / 1000;
 
-    var hours   = Math.floor(timeDurationInSeconds / 3600);
+    var hours = Math.floor(timeDurationInSeconds / 3600);
     var minutes = Math.floor((timeDurationInSeconds - (hours * 3600)) / 60);
     var seconds = timeDurationInSeconds - (hours * 3600) - (minutes * 60);
 
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    return hours+':'+minutes+':'+seconds;
+    if (hours < 10) { hours = "0" + hours; }
+    if (minutes < 10) { minutes = "0" + minutes; }
+    if (seconds < 10) { seconds = "0" + seconds; }
+    return hours + ':' + minutes + ':' + seconds;
   }
 
   handleSlideChange(event, value) {

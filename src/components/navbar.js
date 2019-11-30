@@ -15,8 +15,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -97,6 +95,7 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [workspaces, setWorkspaces] = React.useState([]);
+  const [workspace, setWorkspace] = React.useState(null);
 
 
   const handleDrawerOpen = () => {
@@ -107,14 +106,18 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
+  const changeWorkspace = (selectedWorkspace) => {
+    setWorkspace(selectedWorkspace);
+  }
+
   React.useEffect(() => {
     Axios.get('https://api.clockify.me/api/v1/workspaces', {
       headers: {
         'X-Api-Key': 'XdqcptH3sFUx3ru+',
       }
     }).then((response) => {
-      console.log(response.data)
       setWorkspaces(response.data);
+      setWorkspace(response.data[0])
     }).catch(function (error) {
       // handle error
       console.log(error);
@@ -168,10 +171,10 @@ export default function PersistentDrawerLeft() {
             <ListItemText primary={'Workspaces'} />
           </ListItem>
           <Divider />
-          {workspaces.map((workspace, index) => (
-            <ListItem button key={workspace.id}>
+          {workspaces.map((cWorkspace, index) => (
+            <ListItem button onClick={() => changeWorkspace(cWorkspace)} key={cWorkspace.id}>
               <ListItemIcon><DashboardIcon /></ListItemIcon>
-              <ListItemText primary={workspace.name} />
+              <ListItemText primary={cWorkspace.name} />
             </ListItem>
           ))}
         </List>
@@ -193,7 +196,7 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-        <CCalculator />
+        <CCalculator workspace={workspace} />
       </main>
     </div>
   );
